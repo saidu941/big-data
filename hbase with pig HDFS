@@ -1,0 +1,714 @@
+sandbox login: maria_dev                                                  
+maria_dev@sandbox.hortonworks.com's password:                             
+Last login: Thu Feb  8 22:34:12 2018 from 172.17.0.2                      
+[maria_dev@sandbox ~]$ su root                                            
+Password:                                                                 
+[root@sandbox maria_dev]# /usr/hdp/current/hbase-master/bin/hbase-daemon.s
+h start rest -p 8000 --infoport 8001                                      
+starting rest, logging to /var/log/hbase/hbase-maria_dev-rest-sandbox.hort
+onworks.com.out                                                           
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]# hbase shell                                     
+HBase Shell; enter 'help<RETURN>' for list of supported commands.         
+Type "exit<RETURN>" to leave the HBase Shell                              
+Version 1.1.2.2.5.0.0-1245, r53538b8ab6749cbb6fdc0fe448b89aa82495fb3f, Fri
+ Aug 26 01:32:27 UTC 2016                                                 
+
+hbase(main):001:0> list                                                   
+TABLE                                                                     
+                                                                          
+                                                                          
+ERROR: org.apache.hadoop.hbase.PleaseHoldException: Master is initializing
+        at org.apache.hadoop.hbase.master.HMaster.checkInitialized(HMaster
+.java:2402)                                                               
+        at org.apache.hadoop.hbase.master.MasterRpcServices.getTableNames(
+MasterRpcServices.java:901)                                               
+        at org.apache.hadoop.hbase.protobuf.generated.MasterProtos$MasterS
+ervice$2.callBlockingMethod(MasterProtos.java:57172)                      
+        at org.apache.hadoop.hbase.ipc.RpcServer.call(RpcServer.java:2127)
+        at org.apache.hadoop.hbase.ipc.CallRunner.run(CallRunner.java:107)
+        at org.apache.hadoop.hbase.ipc.RpcExecutor.consumerLoop(RpcExecuto
+r.java:133)                                                               
+        at org.apache.hadoop.hbase.ipc.RpcExecutor$1.run(RpcExecutor.java:
+108)                                                                      
+        at java.lang.Thread.run(Thread.java:745)                          
+                                                                          
+Here is some help for this command:                                       
+List all tables in hbase. Optional regular expression parameter could     
+be used to filter the output. Examples:                                   
+                                                                          
+  hbase> list                                                             
+  hbase> list 'abc.*'                                                     
+  hbase> list 'ns:abc.*'                                                  
+  hbase> list 'ns:.*'                                                     
+                                                                          
+                                                                          
+hbase(main):002:0>                                                        
+hbase(main):003:0*                                                        
+hbase(main):004:0*                                                        
+hbase(main):005:0*                                                        
+hbase(main):006:0* create 'users','userinfo',                             
+hbase(main):007:0*                                                        
+hbase(main):008:0* ;                                                      
+hbase(main):009:0* exit                                                   
+SyntaxError: (hbase):8: syntax error, unexpected ';'                      
+                                                                          
+                                                                          
+hbase(main):010:0> create 'users','userinfo'                              
+                                                                          
+ERROR: org.apache.hadoop.hbase.PleaseHoldException: Master is initializing
+        at org.apache.hadoop.hbase.master.HMaster.checkInitialized(HMaster
+.java:2402)                                                               
+        at org.apache.hadoop.hbase.master.HMaster.checkNamespaceManagerRea
+dy(HMaster.java:2407)                                                     
+        at org.apache.hadoop.hbase.master.HMaster.ensureNamespaceExists(HM
+aster.java:2606)                                                          
+        at org.apache.hadoop.hbase.master.HMaster.createTable(HMaster.java
+:1597)                                                                    
+        at org.apache.hadoop.hbase.master.MasterRpcServices.createTable(Ma
+sterRpcServices.java:462)                                                 
+        at org.apache.hadoop.hbase.protobuf.generated.MasterProtos$MasterS
+ervice$2.callBlockingMethod(MasterProtos.java:57204)                      
+        at org.apache.hadoop.hbase.ipc.RpcServer.call(RpcServer.java:2127)
+        at org.apache.hadoop.hbase.ipc.CallRunner.run(CallRunner.java:107)
+        at org.apache.hadoop.hbase.ipc.RpcExecutor.consumerLoop(RpcExecuto
+r.java:133)                                                               
+        at org.apache.hadoop.hbase.ipc.RpcExecutor$1.run(RpcExecutor.java:
+108)                                                                      
+        at java.lang.Thread.run(Thread.java:745)                          
+                                                                          
+Here is some help for this command:                                       
+Creates a table. Pass a table name, and a set of column family            
+specifications (at least one), and, optionally, table configuration.      
+Column specification can be a simple string (name), or a dictionary       
+(dictionaries are described below in main help output), necessarily       
+including NAME attribute.                                                 
+Examples:                                                                 
+                                                                          
+Create a table with namespace=ns1 and table qualifier=t1                  
+  hbase> create 'ns1:t1', {NAME => 'f1', VERSIONS => 5}                   
+                                                                          
+Create a table with namespace=default and table qualifier=t1              
+  hbase> create 't1', {NAME => 'f1'}, {NAME => 'f2'}, {NAME => 'f3'}      
+  hbase> # The above in shorthand would be the following:                 
+  hbase> create 't1', 'f1', 'f2', 'f3'                                    
+  hbase> create 't1', {NAME => 'f1', VERSIONS => 1, TTL => 2592000, BLOCKC
+ACHE => true}                                                             
+  hbase> create 't1', {NAME => 'f1', CONFIGURATION => {'hbase.hstore.block
+ingStoreFiles' => '10'}}                                                  
+
+Table configuration options can be put at the end.                        
+Examples:                                                                 
+                                                                          
+  hbase> create 'ns1:t1', 'f1', SPLITS => ['10', '20', '30', '40']        
+  hbase> create 't1', 'f1', SPLITS => ['10', '20', '30', '40']            
+  hbase> create 't1', 'f1', SPLITS_FILE => 'splits.txt', OWNER => 'johndoe
+'                                                                         
+  hbase> create 't1', {NAME => 'f1', VERSIONS => 5}, METADATA => { 'mykey'
+ => 'myvalue' }                                                           
+  hbase> # Optionally pre-split the table into NUMREGIONS, using          
+  hbase> # SPLITALGO ("HexStringSplit", "UniformSplit" or classname)      
+  hbase> create 't1', 'f1', {NUMREGIONS => 15, SPLITALGO => 'HexStringSpli
+t'}                                                                       
+  hbase> create 't1', 'f1', {NUMREGIONS => 15, SPLITALGO => 'HexStringSpli
+t', REGION_REPLICATION => 2, CONFIGURATION => {'hbase.hregion.scan.loadCol
+umnFamiliesOnDemand' => 'true'}}                                          
+                                                                          
+You can also keep around a reference to the created table:                
+                                                                          
+  hbase> t1 = create 't1', 'f1'                                           
+                                                                          
+Which gives you a reference to the table named 't1', on which you can then
+call methods.                                                             
+                                                                          
+                                                                          
+hbase(main):011:0> exit                                                   
+[root@sandbox maria_dev]# wget http://media.sundog-soft.com/hadoop/hbase.p
+ig
+--2018-02-12 00:07:05--  http://media.sundog-soft.com/hadoop/hbase.pig    
+Resolving media.sundog-soft.com... 52.216.16.56                           
+Connecting to media.sundog-soft.com|52.216.16.56|:80... connected.        
+HTTP request sent, awaiting response... 200 OK                            
+Length: 310 [application/octet-stream]                                    
+Saving to: “hbase.pig”                                                    
+                                                                          
+100%[================================>] 310         --.-K/s   in 0s       
+                                                                          
+2018-02-12 00:07:06 (45.9 MB/s) - “hbase.pig” saved [310/310]             
+                                                                          
+[root@sandbox maria_dev]# less hbase.pig                                  
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]# pig hbase.pig                                   
+18/02/12 00:09:43 INFO pig.ExecTypeProvider: Trying ExecType : LOCAL      
+18/02/12 00:09:43 INFO pig.ExecTypeProvider: Trying ExecType : MAPREDUCE  
+18/02/12 00:09:43 INFO pig.ExecTypeProvider: Picked MAPREDUCE as the ExecT
+ype                                                                       
+2018-02-12 00:09:43,986 [main] INFO  org.apache.pig.Main - Apache Pig vers
+ion 0.16.0.2.5.0.0-1245 (rexported) compiled Aug 26 2016, 02:07:35        
+2018-02-12 00:09:43,986 [main] INFO  org.apache.pig.Main - Logging error m
+essages to: /home/maria_dev/pig_1518394183981.log                         
+2018-02-12 00:09:45,671 [main] INFO  org.apache.pig.impl.util.Utils - Defa
+ult bootup file /root/.pigbootup not found                                
+2018-02-12 00:09:46,066 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.HExecutionEngine - Connecting to hadoop file system at: hdfs://sa
+ndbox.hortonworks.com:8020                                                
+2018-02-12 00:09:47,392 [main] INFO  org.apache.pig.PigServer - Pig Script
+ ID for the session: PIG-hbase.pig-e75ca07c-f266-4f98-b8cd-7bd9edbd37ae   
+2018-02-12 00:09:48,138 [main] INFO  org.apache.hadoop.yarn.client.api.imp
+l.TimelineClientImpl - Timeline service address: http://sandbox.hortonwork
+s.com:8188/ws/v1/timeline/                                                
+2018-02-12 00:09:48,392 [main] INFO  org.apache.pig.backend.hadoop.PigATSC
+lient - Created ATS Hook                                                  
+2018-02-12 00:09:50,179 [main] INFO  org.apache.pig.impl.util.SpillableMem
+oryManager - Selected heap (PS Old Gen) of size 699400192 to monitor. coll
+ectionUsageThreshold = 489580128, usageThreshold = 489580128              
+2018-02-12 00:09:50,670 [main] INFO  org.apache.pig.tools.pigstats.ScriptS
+tate - Pig features used in the script: UNKNOWN                           
+2018-02-12 00:09:50,738 [main] INFO  org.apache.pig.data.SchemaTupleBacken
+d - Key [pig.schematuple] was not set... will not generate code.          
+2018-02-12 00:09:50,811 [main] INFO  org.apache.pig.newplan.logical.optimi
+zer.LogicalPlanOptimizer - {RULES_ENABLED=[AddForEach, ColumnMapKeyPrune, 
+ConstantCalculator, GroupByConstParallelSetter, LimitOptimizer, LoadTypeCa
+stInserter, MergeFilter, MergeForEach, PartitionFilterOptimizer, Predicate
+PushdownOptimizer, PushDownForEachFlatten, PushUpFilter, SplitFilter, Stre
+amTypeCastInserter]}                                                      
+2018-02-12 00:09:51,207 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MRCompiler - File concatenation threshold: 100 opt
+imistic? false                                                            
+2018-02-12 00:09:51,296 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MultiQueryOptimizer - MR plan size before optimiza
+tion: 1                                                                   
+2018-02-12 00:09:51,297 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MultiQueryOptimizer - MR plan size after optimizat
+ion: 1                                                                    
+2018-02-12 00:09:52,181 [main] INFO  org.apache.hadoop.yarn.client.api.imp
+l.TimelineClientImpl - Timeline service address: http://sandbox.hortonwork
+s.com:8188/ws/v1/timeline/                                                
+2018-02-12 00:09:52,199 [main] INFO  org.apache.hadoop.yarn.client.RMProxy
+ - Connecting to ResourceManager at sandbox.hortonworks.com/172.17.0.2:805
+0                                                                         
+2018-02-12 00:09:52,467 [main] INFO  org.apache.hadoop.yarn.client.AHSProx
+y - Connecting to Application History server at sandbox.hortonworks.com/17
+2.17.0.2:10200                                                            
+2018-02-12 00:09:52,634 [main] INFO  org.apache.pig.tools.pigstats.mapredu
+ce.MRScriptState - Pig script settings are added to the job               
+2018-02-12 00:09:52,648 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - mapred.job.reduce.markreset.b
+uffer.percent is not set, set to default 0.3                              
+2018-02-12 00:09:52,651 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - This job cannot be converted 
+run in-process                                                            
+2018-02-12 00:09:53,848 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/pig/pig-0.16.0.2.5.0.0-1245-core-h2.jar to DistributedCache throug
+h /tmp/temp1942340667/tmp-1865880912/pig-0.16.0.2.5.0.0-1245-core-h2.jar  
+2018-02-12 00:09:53,966 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/hbase/lib/metrics-core-2.2.0.jar to DistributedCache through /tmp/
+temp1942340667/tmp920964289/metrics-core-2.2.0.jar                        
+2018-02-12 00:09:54,101 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/hadoop/lib/zookeeper-3.4.6.2.5.0.0-1245.jar to DistributedCache th
+rough /tmp/temp1942340667/tmp1730188575/zookeeper-3.4.6.2.5.0.0-1245.jar  
+2018-02-12 00:09:54,192 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/hadoop/lib/protobuf-java-2.5.0.jar to DistributedCache through /tm
+p/temp1942340667/tmp-2092866128/protobuf-java-2.5.0.jar                   
+2018-02-12 00:09:54,673 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/pig/lib/hbase-common-1.1.2.2.5.0.0-1245.jar to DistributedCache th
+rough /tmp/temp1942340667/tmp167735979/hbase-common-1.1.2.2.5.0.0-1245.jar
+2018-02-12 00:09:54,762 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/hbase/lib/hbase-hadoop-compat-1.1.2.2.5.0.0-1245.jar to Distribute
+dCache through /tmp/temp1942340667/tmp1497802903/hbase-hadoop-compat-1.1.2
+.2.5.0.0-1245.jar                                                         
+2018-02-12 00:09:55,274 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/hadoop/lib/htrace-core-3.1.0-incubating.jar to DistributedCache th
+rough /tmp/temp1942340667/tmp-882805324/htrace-core-3.1.0-incubating.jar  
+2018-02-12 00:09:55,352 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/pig/lib/hbase-client-1.1.2.2.5.0.0-1245.jar to DistributedCache th
+rough /tmp/temp1942340667/tmp-1487674331/hbase-client-1.1.2.2.5.0.0-1245.j
+ar                                                                        
+2018-02-12 00:09:55,604 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/pig/lib/hbase-server-1.1.2.2.5.0.0-1245.jar to DistributedCache th
+rough /tmp/temp1942340667/tmp-1043126376/hbase-server-1.1.2.2.5.0.0-1245.j
+ar                                                                        
+2018-02-12 00:09:55,769 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/hadoop-hdfs/lib/netty-all-4.0.23.Final.jar to DistributedCache thr
+ough /tmp/temp1942340667/tmp-615978784/netty-all-4.0.23.Final.jar         
+2018-02-12 00:09:56,175 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/pig/lib/hbase-protocol-1.1.2.2.5.0.0-1245.jar to DistributedCache 
+through /tmp/temp1942340667/tmp919768215/hbase-protocol-1.1.2.2.5.0.0-1245
+.jar                                                                      
+2018-02-12 00:09:56,280 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/hadoop/lib/guava-11.0.2.jar to DistributedCache through /tmp/temp1
+942340667/tmp779915944/guava-11.0.2.jar                                   
+2018-02-12 00:09:56,386 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/pig/lib/automaton-1.11-8.jar to DistributedCache through /tmp/temp
+1942340667/tmp-1318106016/automaton-1.11-8.jar                            
+2018-02-12 00:09:56,495 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/pig/lib/antlr-runtime-3.4.jar to DistributedCache through /tmp/tem
+p1942340667/tmp562468773/antlr-runtime-3.4.jar                            
+2018-02-12 00:09:56,581 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Added jar file:/usr/hdp/2.5.0
+.0-1245/hadoop/lib/joda-time-2.8.1.jar to DistributedCache through /tmp/te
+mp1942340667/tmp-974327495/joda-time-2.8.1.jar                            
+2018-02-12 00:09:56,599 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.JobControlCompiler - Setting up single store job  
+2018-02-12 00:09:56,620 [main] INFO  org.apache.pig.data.SchemaTupleFronte
+nd - Key [pig.schematuple] is false, will not generate code.              
+2018-02-12 00:09:56,620 [main] INFO  org.apache.pig.data.SchemaTupleFronte
+nd - Starting process to move generated code to distributed cacche        
+2018-02-12 00:09:56,620 [main] INFO  org.apache.pig.data.SchemaTupleFronte
+nd - Setting key [pig.schematuple.classes] with classes to deserialize [] 
+2018-02-12 00:09:56,710 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MapReduceLauncher - 1 map-reduce job(s) waiting fo
+r submission.                                                             
+2018-02-12 00:09:57,112 [JobControl] INFO  org.apache.hadoop.yarn.client.a
+pi.impl.TimelineClientImpl - Timeline service address: http://sandbox.hort
+onworks.com:8188/ws/v1/timeline/                                          
+2018-02-12 00:09:57,120 [JobControl] INFO  org.apache.hadoop.yarn.client.R
+MProxy - Connecting to ResourceManager at sandbox.hortonworks.com/172.17.0
+.2:8050                                                                   
+2018-02-12 00:09:57,121 [JobControl] INFO  org.apache.hadoop.yarn.client.A
+HSProxy - Connecting to Application History server at sandbox.hortonworks.
+com/172.17.0.2:10200                                                      
+2018-02-12 00:09:57,448 [JobControl] WARN  org.apache.hadoop.mapreduce.Job
+ResourceUploader - No job jar file set.  User classes may not be found. Se
+e Job or Job#setJar(String).                                              
+2018-02-12 00:09:57,583 [JobControl] INFO  org.apache.pig.builtin.PigStora
+ge - Using PigTextInputFormat                                             
+2018-02-12 00:09:57,597 [JobControl] INFO  org.apache.hadoop.mapreduce.lib
+.input.FileInputFormat - Total input paths to process : 1                 
+2018-02-12 00:09:57,598 [JobControl] INFO  org.apache.pig.backend.hadoop.e
+xecutionengine.util.MapRedUtil - Total input paths to process : 1         
+2018-02-12 00:09:57,629 [JobControl] INFO  com.hadoop.compression.lzo.GPLN
+ativeCodeLoader - Loaded native gpl library                               
+2018-02-12 00:09:57,635 [JobControl] INFO  com.hadoop.compression.lzo.LzoC
+odec - Successfully loaded & initialized native-lzo library [hadoop-lzo re
+v 7a4b57bedce694048432dd5bf5b90a6c8ccdba80]                               
+2018-02-12 00:09:57,649 [JobControl] INFO  org.apache.pig.backend.hadoop.e
+xecutionengine.util.MapRedUtil - Total input paths (combined) to process :
+ 1                                                                        
+2018-02-12 00:09:57,867 [JobControl] INFO  org.apache.hadoop.mapreduce.Job
+Submitter - number of splits:1                                            
+2018-02-12 00:09:58,198 [JobControl] INFO  org.apache.hadoop.mapreduce.Job
+Submitter - Submitting tokens for job: job_1517954993698_0004             
+2018-02-12 00:09:58,494 [JobControl] INFO  org.apache.hadoop.mapred.YARNRu
+nner - Job jar is not present. Not adding any jar to the list of resources
+.                                                                         
+2018-02-12 00:09:58,898 [JobControl] INFO  org.apache.hadoop.yarn.client.a
+pi.impl.YarnClientImpl - Submitted application application_1517954993698_0
+004                                                                       
+2018-02-12 00:09:59,104 [JobControl] INFO  org.apache.hadoop.mapreduce.Job
+ - The url to track the job: http://sandbox.hortonworks.com:8088/proxy/app
+lication_1517954993698_0004/                                              
+2018-02-12 00:09:59,105 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MapReduceLauncher - HadoopJobId: job_1517954993698
+_0004                                                                     
+2018-02-12 00:09:59,105 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MapReduceLauncher - Processing aliases users      
+2018-02-12 00:09:59,105 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MapReduceLauncher - detailed locations: M: users[1
+,8],users[-1,-1] C:  R:                                                   
+2018-02-12 00:09:59,141 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MapReduceLauncher - 0% complete                   
+2018-02-12 00:09:59,141 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MapReduceLauncher - Running jobs are [job_15179549
+93698_0004]                                                               
+                                                                          
+                                                                          
+                                                                          
+                                                                          
+                                                                          
+                                                                          
+ 2018-02-12 00:11:33,322 [main] WARN  org.apache.pig.backend.hadoop.execut
+ionengine.mapReduceLayer.MapReduceLauncher - Ooops! Some job has failed! S
+pecify -stop_on_failure if you want Pig to stop immediately on failure.   
+2018-02-12 00:11:33,323 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MapReduceLauncher - job job_1517954993698_0004 has
+ failed! Stop running all dependent jobs                                  
+2018-02-12 00:11:33,323 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MapReduceLauncher - 100% complete                 
+2018-02-12 00:11:33,675 [main] INFO  org.apache.hadoop.yarn.client.api.imp
+l.TimelineClientImpl - Timeline service address: http://sandbox.hortonwork
+s.com:8188/ws/v1/timeline/                                                
+2018-02-12 00:11:33,676 [main] INFO  org.apache.hadoop.yarn.client.RMProxy
+ - Connecting to ResourceManager at sandbox.hortonworks.com/172.17.0.2:805
+0                                                                         
+2018-02-12 00:11:33,681 [main] INFO  org.apache.hadoop.yarn.client.AHSProx
+y - Connecting to Application History server at sandbox.hortonworks.com/17
+2.17.0.2:10200                                                            
+2018-02-12 00:11:33,810 [main] INFO  org.apache.hadoop.mapred.ClientServic
+eDelegate - Application state is completed. FinalApplicationStatus=FAILED.
+ Redirecting to job history server                                        
+2018-02-12 00:11:36,273 [main] ERROR org.apache.pig.tools.pigstats.PigStat
+s - ERROR 0: org.apache.pig.backend.executionengine.ExecException: ERROR 2
+997: Unable to recreate exception from backed error: Error: org.apache.had
+oop.hbase.client.RetriesExhaustedWithDetailsException: Failed 943 actions:
+ Table 'users' was not found, got: iemployee.: 943 times,                 
+        at org.apache.hadoop.hbase.client.AsyncProcess$BatchErrors.makeExc
+eption(AsyncProcess.java:234)                                             
+        at org.apache.hadoop.hbase.client.AsyncProcess$BatchErrors.access$
+1700(AsyncProcess.java:214)                                               
+        at org.apache.hadoop.hbase.client.AsyncProcess.waitForAllPreviousO
+psAndReset(AsyncProcess.java:1751)                                        
+        at org.apache.hadoop.hbase.client.BufferedMutatorImpl.backgroundFl
+ushCommits(BufferedMutatorImpl.java:208)                                  
+        at org.apache.hadoop.hbase.client.BufferedMutatorImpl.close(Buffer
+edMutatorImpl.java:158)                                                   
+        at org.apache.hadoop.hbase.mapreduce.TableOutputFormat$TableRecord
+Writer.close(TableOutputFormat.java:120)                                  
+        at org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.Pi
+gOutputFormat$PigRecordWriter.close(PigOutputFormat.java:154)             
+        at org.apache.hadoop.mapred.MapTask$NewDirectOutputCollector.close
+(MapTask.java:670)                                                        
+        at org.apache.hadoop.mapred.MapTask.runNewMapper(MapTask.java:793)
+        at org.apache.hadoop.mapred.MapTask.run(MapTask.java:341)         
+        at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:168)   
+        at java.security.AccessController.doPrivileged(Native Method)     
+        at javax.security.auth.Subject.doAs(Subject.java:422)             
+        at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupI
+nformation.java:1724)                                                     
+        at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:162)    
+                                                                          
+2018-02-12 00:11:36,274 [main] ERROR org.apache.pig.tools.pigstats.mapredu
+ce.MRPigStatsUtil - 1 map reduce job(s) failed!                           
+2018-02-12 00:11:36,279 [main] INFO  org.apache.pig.tools.pigstats.mapredu
+ce.SimplePigStats - Script Statistics:                                    
+                                                                          
+HadoopVersion   PigVersion      UserId  StartedAt       FinishedAt      Fe
+atures                                                                    
+2.7.3.2.5.0.0-1245      0.16.0.2.5.0.0-1245     root    2018-02-12 00:09:5
+2       2018-02-12 00:11:36     UNKNOWN                                   
+                                                                          
+Failed!                                                                   
+                                                                          
+Failed Jobs:                                                              
+JobId   Alias   Feature Message Outputs                                   
+job_1517954993698_0004  users   MAP_ONLY        Message: Job failed!    hb
+ase://users,                                                              
+                                                                          
+Input(s):                                                                 
+Failed to read data from "/user/maria_dev/ml-100k/u.user"                 
+                                                                          
+Output(s):                                                                
+Failed to produce result in "hbase://users"                               
+                                                                          
+Counters:                                                                 
+Total records written : 0                                                 
+Total bytes written : 0                                                   
+Spillable Memory Manager spill count : 0                                  
+Total bags proactively spilled: 0                                         
+Total records proactively spilled: 0                                      
+                                                                          
+Job DAG:                                                                  
+job_1517954993698_0004                                                    
+                                                                          
+                                                                          
+2018-02-12 00:11:36,279 [main] INFO  org.apache.pig.backend.hadoop.executi
+onengine.mapReduceLayer.MapReduceLauncher - Failed!                       
+2018-02-12 00:11:36,329 [main] ERROR org.apache.pig.tools.grunt.GruntParse
+r - ERROR 2997: Unable to recreate exception from backed error: Error: org
+.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException: Failed 9
+43 actions: Table 'users' was not found, got: iemployee.: 943 times,      
+        at org.apache.hadoop.hbase.client.AsyncProcess$BatchErrors.makeExc
+eption(AsyncProcess.java:234)                                             
+        at org.apache.hadoop.hbase.client.AsyncProcess$BatchErrors.access$
+1700(AsyncProcess.java:214)                                               
+        at org.apache.hadoop.hbase.client.AsyncProcess.waitForAllPreviousO
+psAndReset(AsyncProcess.java:1751)                                        
+        at org.apache.hadoop.hbase.client.BufferedMutatorImpl.backgroundFl
+ushCommits(BufferedMutatorImpl.java:208)                                  
+        at org.apache.hadoop.hbase.client.BufferedMutatorImpl.close(Buffer
+edMutatorImpl.java:158)                                                   
+        at org.apache.hadoop.hbase.mapreduce.TableOutputFormat$TableRecord
+Writer.close(TableOutputFormat.java:120)                                  
+        at org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.Pi
+gOutputFormat$PigRecordWriter.close(PigOutputFormat.java:154)             
+        at org.apache.hadoop.mapred.MapTask$NewDirectOutputCollector.close
+(MapTask.java:670)                                                        
+        at org.apache.hadoop.mapred.MapTask.runNewMapper(MapTask.java:793)
+        at org.apache.hadoop.mapred.MapTask.run(MapTask.java:341)         
+        at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:168)   
+        at java.security.AccessController.doPrivileged(Native Method)     
+        at javax.security.auth.Subject.doAs(Subject.java:422)             
+        at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupI
+nformation.java:1724)                                                     
+        at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:162)    
+                                                                          
+Details at logfile: /home/maria_dev/pig_1518394183981.log                 
+2018-02-12 00:11:36,405 [main] INFO  org.apache.pig.Main - Pig script comp
+leted in 1 minute, 52 seconds and 826 milliseconds (112826 ms)            
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#                                                 
+[root@sandbox maria_dev]#  scan 'users;                                   
+> '                                                                       
+bash: scan: command not found                                             
+[root@sandbox maria_dev]# scan 'users'                                    
+bash: scan: command not found                                             
+[root@sandbox maria_dev]# list                                            
+bash: list: command not found                                             
+[root@sandbox maria_dev]# scan 'users;                                    
+> '                                                                       
+bash: scan: command not found                                             
+[root@sandbox maria_dev]# scan 'users'                                    
+bash: scan: command not found                                             
+[root@sandbox maria_dev]# hbase                                           
+Usage: hbase [<options>] <command> [<args>]                               
+Options:                                                                  
+  --config DIR    Configuration direction to use. Default: ./conf         
+  --hosts HOSTS   Override the list in 'regionservers' file               
+  --auth-as-server Authenticate to ZooKeeper using servers configuration  
+                                                                          
+Commands:                                                                 
+Some commands take arguments. Pass no args or -h for usage.               
+  shell           Run the HBase shell                                     
+  hbck            Run the hbase 'fsck' tool                               
+  snapshot        Create a new snapshot of a table                        
+  wal             Write-ahead-log analyzer                                
+  hfile           Store file analyzer                                     
+  zkcli           Run the ZooKeeper shell                                 
+  upgrade         Upgrade hbase                                           
+  master          Run an HBase HMaster node                               
+  regionserver    Run an HBase HRegionServer node                         
+  zookeeper       Run a Zookeeper server                                  
+  rest            Run an HBase REST server                                
+  thrift          Run the HBase Thrift server                             
+  thrift2         Run the HBase Thrift2 server                            
+  clean           Run the HBase clean up script                           
+  classpath       Dump hbase CLASSPATH                                    
+  mapredcp        Dump CLASSPATH entries required by mapreduce            
+  pe              Run PerformanceEvaluation                               
+  ltt             Run LoadTestTool                                        
+  canary          Run the Canary tool                                     
+  version         Print the version                                       
+  backup          backup tables for recovery                              
+  restore         restore tables from existing backup image               
+  CLASSNAME       Run the class named CLASSNAME                           
+[root@sandbox maria_dev]# hbase shell                                     
+HBase Shell; enter 'help<RETURN>' for list of supported commands.         
+Type "exit<RETURN>" to leave the HBase Shell                              
+Version 1.1.2.2.5.0.0-1245, r53538b8ab6749cbb6fdc0fe448b89aa82495fb3f, Fri
+ Aug 26 01:32:27 UTC 2016                                                 
+                                                                          
+hbase(main):001:0> list                                                   
+TABLE                                                                     
+ATLAS_ENTITY_AUDIT_EVENTS                                                 
+atlas_titan                                                               
+iemployee                                                                 
+3 row(s) in 0.4600 seconds                                                
+                                                                          
+=> ["ATLAS_ENTITY_AUDIT_EVENTS", "atlas_titan", "iemployee"]              
+hbase(main):002:0> scan 'users;                                           
+hbase(main):003:0' '                                                      
+                                                                          
+ERROR: Illegal character code:59, <;> at 5. User-space table qualifiers ca
+n only contain 'alphanumeric characters': i.e. [a-zA-Z_0-9-.]: users;     
+                                                                          
+Here is some help for this command:                                       
+Scan a table; pass table name and optionally a dictionary of scanner      
+specifications.  Scanner specifications may include one or more of:       
+TIMERANGE, FILTER, LIMIT, STARTROW, STOPROW, ROWPREFIXFILTER, TIMESTAMP,  
+MAXLENGTH or COLUMNS, CACHE or RAW, VERSIONS                              
+                                                                          
+If no columns are specified, all columns will be scanned.                 
+To scan all members of a column family, leave the qualifier empty as in   
+'col_family:'.                                                            
+                                                                          
+The filter can be specified in two ways:                                  
+1. Using a filterString - more information on this is available in the    
+Filter Language document attached to the HBASE-4176 JIRA                  
+2. Using the entire package name of the filter.                           
+                                                                          
+Some examples:                                                            
+                                                                          
+  hbase> scan 'hbase:meta'                                                
+  hbase> scan 'hbase:meta', {COLUMNS => 'info:regioninfo'}                
+  hbase> scan 'ns1:t1', {COLUMNS => ['c1', 'c2'], LIMIT => 10, STARTROW =>
+ 'xyz'}                                                                   
+  hbase> scan 't1', {COLUMNS => ['c1', 'c2'], LIMIT => 10, STARTROW => 'xy
+z'}                                                                       
+  hbase> scan 't1', {COLUMNS => 'c1', TIMERANGE => [1303668804, 1303668904
+]}                                                                        
+  hbase> scan 't1', {REVERSED => true}                                    
+  hbase> scan 't1', {ROWPREFIXFILTER => 'row2', FILTER => "               
+    (QualifierFilter (>=, 'binary:xyz')) AND (TimestampsFilter ( 123, 456)
+)"}                                                                       
+  hbase> scan 't1', {FILTER =>                                            
+    org.apache.hadoop.hbase.filter.ColumnPaginationFilter.new(1, 0)}      
+  hbase> scan 't1', {CONSISTENCY => 'TIMELINE'}                           
+For setting the Operation Attributes                                      
+  hbase> scan 't1', { COLUMNS => ['c1', 'c2'], ATTRIBUTES => {'mykey' => '
+myvalue'}}                                                                
+  hbase> scan 't1', { COLUMNS => ['c1', 'c2'], AUTHORIZATIONS => ['PRIVATE
+','SECRET']}                                                              
+For experts, there is an additional option -- CACHE_BLOCKS -- which       
+switches block caching for the scanner on (true) or off (false).  By      
+default it is enabled.  Examples:                                         
+                                                                          
+  hbase> scan 't1', {COLUMNS => ['c1', 'c2'], CACHE_BLOCKS => false}      
+                                                                          
+Also for experts, there is an advanced option -- RAW -- which instructs th
+e                                                                         
+scanner to return all cells (including delete markers and uncollected dele
+ted                                                                       
+cells). This option cannot be combined with requesting specific COLUMNS.  
+Disabled by default.  Example:                                            
+                                                                          
+  hbase> scan 't1', {RAW => true, VERSIONS => 10}                         
+                                                                          
+Besides the default 'toStringBinary' format, 'scan' supports custom format
+ting                                                                      
+by column.  A user can define a FORMATTER by adding it to the column name 
+in                                                                        
+the scan specification.  The FORMATTER can be stipulated:                 
+                                                                          
+ 1. either as a org.apache.hadoop.hbase.util.Bytes method name (e.g, toInt
+, toString)                                                               
+ 2. or as a custom class followed by method name: e.g. 'c(MyFormatterClass
+).format'.                                                                
+                                                                          
+Example formatting cf:qualifier1 and cf:qualifier2 both as Integers:      
+  hbase> scan 't1', {COLUMNS => ['cf:qualifier1:toInt',                   
+    'cf:qualifier2:c(org.apache.hadoop.hbase.util.Bytes).toInt'] }        
+                                                                          
+Note that you can specify a FORMATTER by column only (cf:qualifier).  You 
+cannot                                                                    
+specify a FORMATTER for all columns of a column family.                   
+                                                                          
+Scan can also be used directly from a table, by first getting a reference 
+to a                                                                      
+table, like such:                                                         
+                                                                          
+  hbase> t = get_table 't'                                                
+  hbase> t.scan                                                           
+                                                                          
+Note in the above situation, you can still provide all the filtering, colu
+mns,                                                                      
+options, etc as described above.                                          
+                                                                          
+                                                                          
+                                                                          
+hbase(main):004:0> scan 'users'                                           
+ROW                 COLUMN+CELL                                           
+                                                                          
+ERROR: Unknown table users!                                               
+                                                                          
+Here is some help for this command:                                       
+Scan a table; pass table name and optionally a dictionary of scanner      
+specifications.  Scanner specifications may include one or more of:       
+TIMERANGE, FILTER, LIMIT, STARTROW, STOPROW, ROWPREFIXFILTER, TIMESTAMP,  
+MAXLENGTH or COLUMNS, CACHE or RAW, VERSIONS                              
+                                                                          
+If no columns are specified, all columns will be scanned.                 
+To scan all members of a column family, leave the qualifier empty as in   
+'col_family:'.                                                            
+                                                                          
+The filter can be specified in two ways:                                  
+1. Using a filterString - more information on this is available in the    
+Filter Language document attached to the HBASE-4176 JIRA                  
+2. Using the entire package name of the filter.                           
+                                                                          
+Some examples:                                                            
+                                                                          
+  hbase> scan 'hbase:meta'                                                
+  hbase> scan 'hbase:meta', {COLUMNS => 'info:regioninfo'}                
+  hbase> scan 'ns1:t1', {COLUMNS => ['c1', 'c2'], LIMIT => 10, STARTROW =>
+ 'xyz'}                                                                   
+  hbase> scan 't1', {COLUMNS => ['c1', 'c2'], LIMIT => 10, STARTROW => 'xy
+z'}                                                                       
+  hbase> scan 't1', {COLUMNS => 'c1', TIMERANGE => [1303668804, 1303668904
+]}                                                                        
+  hbase> scan 't1', {REVERSED => true}                                    
+  hbase> scan 't1', {ROWPREFIXFILTER => 'row2', FILTER => "               
+    (QualifierFilter (>=, 'binary:xyz')) AND (TimestampsFilter ( 123, 456)
+)"}                                                                       
+  hbase> scan 't1', {FILTER =>                                            
+    org.apache.hadoop.hbase.filter.ColumnPaginationFilter.new(1, 0)}      
+  hbase> scan 't1', {CONSISTENCY => 'TIMELINE'}                           
+For setting the Operation Attributes                                      
+  hbase> scan 't1', { COLUMNS => ['c1', 'c2'], ATTRIBUTES => {'mykey' => '
+myvalue'}}                                                                
+  hbase> scan 't1', { COLUMNS => ['c1', 'c2'], AUTHORIZATIONS => ['PRIVATE
+','SECRET']}                                                              
+For experts, there is an additional option -- CACHE_BLOCKS -- which       
+switches block caching for the scanner on (true) or off (false).  By      
+default it is enabled.  Examples:                                         
+                                                                          
+  hbase> scan 't1', {COLUMNS => ['c1', 'c2'], CACHE_BLOCKS => false}      
+                                                                          
+Also for experts, there is an advanced option -- RAW -- which instructs th
+e                                                                         
+scanner to return all cells (including delete markers and uncollected dele
+ted                                                                       
+cells). This option cannot be combined with requesting specific COLUMNS.  
+Disabled by default.  Example:                                            
+                                                                          
+  hbase> scan 't1', {RAW => true, VERSIONS => 10}                         
+                                                                          
+Besides the default 'toStringBinary' format, 'scan' supports custom format
+ting                                                                      
+by column.  A user can define a FORMATTER by adding it to the column name 
+in                                                                        
+the scan specification.  The FORMATTER can be stipulated:                 
+                                                                          
+ 1. either as a org.apache.hadoop.hbase.util.Bytes method name (e.g, toInt
+, toString)                                                               
+ 2. or as a custom class followed by method name: e.g. 'c(MyFormatterClass
+).format'.                                                                
+                                                                          
+Example formatting cf:qualifier1 and cf:qualifier2 both as Integers:      
+  hbase> scan 't1', {COLUMNS => ['cf:qualifier1:toInt',                   
+    'cf:qualifier2:c(org.apache.hadoop.hbase.util.Bytes).toInt'] }        
+                                                                          
+Note that you can specify a FORMATTER by column only (cf:qualifier).  You 
+cannot                                                                    
+specify a FORMATTER for all columns of a column family.                   
+                                                                          
+Scan can also be used directly from a table, by first getting a reference 
+to a                                                                      
+table, like such:                                                         
+                                                                          
+  hbase> t = get_table 't'                                                
+  hbase> t.scan                                                           
+                                                                          
+Note in the above situation, you can still provide all the filtering, colu
+mns,                                                                      
+options, etc as described above.                                          
+                                                                          
+                                                                          
+                                                                          
+hbase(main):005:0> exit                                                   
+[root@sandbox maria_dev]# exit                                            
+exit                                                                      
+[maria_dev@sandbox ~]$ exit                                               
+logout                                                                    
+Connection to sandbox.hortonworks.com closed.                             
+Session closed.    
